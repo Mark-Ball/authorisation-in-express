@@ -1,6 +1,6 @@
 const { Schema } = require('mongoose');
 
-const UserSchema = new Schema(
+const UserSchema = new Schema({
     name: {
         type: String,
         required: true,
@@ -12,7 +12,7 @@ const UserSchema = new Schema(
         trim: true,
         bcrypt: true
     }
-)
+})
 UserSchema.plugin(require('mongoose-bcrypt'));
 
 module.exports = UserSchema;
