@@ -10,7 +10,17 @@ async function createUser(req, res) {
     res.redirect('/public');
 }
 
+function renderLogin(req, res) {
+    res.render('authentication/login');
+}
+
+function login(req, res) {
+    res.redirect('/private');
+}
+
 module.exports = {
     register,
-    createUser
+    createUser,
+    renderLogin,
+    login
 }

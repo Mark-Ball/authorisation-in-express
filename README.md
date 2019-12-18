@@ -127,16 +127,35 @@ If everything is correct, we should be able to run the following:
 - db.users.find() (to show all users)
 - we should see the user we created with a hashed password
 
-### 1.2 Configure passport strategies
+## 3. User login
+
+We are using a passport local strategy (i.e. user name and password) as our first authentication strategy. To do this we must
+- install the modules
+- set up the configuration file
+- use the configuration file in app.js
+- add authenticate middleware in the route
+- create the login page which will be used to send the information
+- set up the methods to (1) render the login page and (2) handle if login is successful
+
+Note that at this stage, we are not using sessions or JWT.
+
+### 3.1 Configure passport strategies
 
 The following modules must be installed:
 - passport
 - passport-local
 
-Create a config directory. Then we follow the passport docs to create a 'local' strategy. 
+Create a config directory. Then we follow the passport docs to create a 'local' strategy.
 
+```Javascript
+WIP
+```
 
-## 3. User login
+Then remember to use ```passport.js``` in ```app.js```.
+```Javascript
+require('./config/passport');
+app.use(passport.initialize());
+```
 
 ### 3.1 Render login page
 
