@@ -145,21 +145,58 @@ The following modules must be installed:
 - passport
 - passport-local
 
-Create a config directory. Then we follow the passport docs to create a 'local' strategy.
+Create a config directory. Then we follow the passport docs to create a 'local' strategy. By default, the fields that passport will check are 'username' and 'password'. We are using 'name' and 'password', so we must include a configuration object as the first argument with ```usernameField: 'name'``` to handle this.
 
 ```Javascript
-WIP
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const UserModel = require('./../database/models/user_model');
+
+passport.use(new LocalStrategy({
+    usernameField: 'name'
+}, async (name, password, done) => {
+    const user = await UserModel.findOne({ name })
+        .catch(done);
+
+    if (!user || !user.verifyPasswordSync(password)) {
+        return done(null, false);
+    }
+
+    return done(null, user);
+    }
+));
+
+module.exports = passport;
 ```
 
 Then remember to use ```passport.js``` in ```app.js```.
 ```Javascript
+const passport = require('passport');
 require('./config/passport');
 app.use(passport.initialize());
 ```
 
 ### 3.1 Render login page
 
+We must include a form for users to enter their login information. Note that the names for the data entered through this form must be the same as in the configuration.
+
+E.g. if we are calling a field 'name' in the form, we must use 'name' in passport.js or else passport will look for a name property on the request and when it can't find one, authentication will fail.
+
 ### 3.2 Check login information
+
+To check login information we include ```passport.authenticate``` in our route. The route we are authenticating is the ```post '/login'``` route.
+```Javascript
+router.post('/login', 
+    passport.authenticate('local', {
+        failureRedirect: '/login',
+        session: false
+    }), 
+    UsersController.login);
+```
+
+At this stage, because we have not set up sessions, we must include ```session: false``` in the authenticate method or else we will get an error for failure to serialize the user.
+
+Lastly we create the ```login``` method in the user controller. In our case it just redirects to another page.
 
 ## 4. Restricted access
 
